@@ -245,7 +245,15 @@ const App = {
         }
     },
 
+    closeAllModals: () => {
+        document.querySelectorAll(".modal-backdrop").forEach(m => {
+            m.classList.remove("active");
+        });
+        document.body.classList.remove("modal-open");
+    },
+
     switchTab: (tabId) => {
+        App.closeAllModals();
         const navBtn = document.querySelector(`.nav-btn[data-tab="${tabId}"]`);
         if (navBtn) {
             navBtn.click();
@@ -276,6 +284,7 @@ const App = {
             btn.addEventListener("click", () => {
                 const targetTab = btn.getAttribute("data-tab");
 
+                App.closeAllModals();
                 navBtns.forEach(b => b.classList.remove("active"));
                 panes.forEach(p => p.classList.remove("active"));
 

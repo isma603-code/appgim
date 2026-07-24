@@ -374,9 +374,10 @@ const WorkoutPlanner = {
             modal.id = "modal-guided-flow";
             modal.className = "modal-backdrop active";
             document.body.appendChild(modal);
-        } else {
-            modal.classList.add("active");
         }
+        if (typeof App !== "undefined" && typeof App.closeAllModals === "function") App.closeAllModals();
+        modal.classList.add("active");
+        document.body.classList.add("modal-open");
 
         const nextExItem = day.exercises[WorkoutPlanner.guidedExerciseIndex + 1];
         const nextExData = nextExItem ? ((typeof EXERCISES_DATABASE !== "undefined" ? EXERCISES_DATABASE.find(e => e.id === nextExItem.exerciseId) : null) || { name: nextExItem.exerciseId }) : null;

@@ -110,6 +110,9 @@ const AutoRegulator = {
     },
 
     showSubstituteModal: function(exerciseId) {
+        const oldModal = document.getElementById('substitute-modal');
+        if (oldModal) oldModal.remove();
+
         const substitutes = this.getSubstitutes(exerciseId);
         if (substitutes.length === 0) {
             alert("No se encontraron alternativas para este ejercicio.");

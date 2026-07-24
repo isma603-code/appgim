@@ -1,0 +1,1041 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="theme-color" content="#030712">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>APEXLAB | Next-Gen Visual Fitness & Science Suite</title>
+    <meta name="description" content="La plataforma de entrenamiento y nutrición deportiva de alta precisión basada en evidencia científica. Guía biomecánica completa por ejercicio.">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Canvas Confetti Library -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <!-- CSS Styles -->
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="dark-theme theme-emerald">
+    <!-- Fluid Mesh Gradient Background -->
+    <div class="mesh-background">
+        <div class="mesh-ball ball-1"></div>
+        <div class="mesh-ball ball-2"></div>
+        <div class="mesh-ball ball-3"></div>
+        <div class="mesh-ball ball-4"></div>
+    </div>
+
+    <!-- Custom Animated Glowing Cursor Follower -->
+    <div id="cursor-glow" class="cursor-glow"></div>
+
+    <!-- Confetti Canvas -->
+    <canvas id="confetti-canvas"></canvas>
+
+    <div class="app-container">
+        <!-- TOP BAR HEADER -->
+        <header class="app-header glass-card-epic">
+            <div class="brand">
+                <div class="brand-icon-hero">
+                    <i class="fa-solid fa-bolt-lightning"></i>
+                </div>
+                <div class="brand-text">
+                    <h1 class="gradient-text">APEX<span>LAB</span></h1>
+                    <span class="badge-pro"><i class="fa-solid fa-gem"></i> ULTIMATE VISUAL EDITION</span>
+                </div>
+            </div>
+
+            <!-- Navigation Tabs (5 Core Streamlined Sections) -->
+            <nav class="main-nav">
+                <button class="nav-btn active" data-tab="dashboard">
+                    <i class="fa-solid fa-house-chimney"></i>
+                    <span>Inicio</span>
+                </button>
+                <button class="nav-btn" data-tab="myplan">
+                    <i class="fa-solid fa-wand-magic-sparkles text-emerald"></i>
+                    <span>Mi Plan IA & Calendario</span>
+                </button>
+                <button class="nav-btn" data-tab="workout">
+                    <i class="fa-solid fa-dumbbell"></i>
+                    <span>Entrenar Hoy</span>
+                </button>
+                <button class="nav-btn" data-tab="nutrition">
+                    <i class="fa-solid fa-utensils"></i>
+                    <span>Nutrición & Menú</span>
+                </button>
+                <button class="nav-btn" data-tab="progress">
+                    <i class="fa-solid fa-chart-line text-amber"></i>
+                    <span>Evolución & Logros</span>
+                </button>
+            </nav>
+
+            <div class="header-actions">
+                <!-- Theme Palette Switcher -->
+                <div class="theme-selector" title="Cambiar Tema Visual">
+                    <button class="theme-dot emerald active" onclick="App.setTheme('emerald')"></button>
+                    <button class="theme-dot cyan" onclick="App.setTheme('cyan')"></button>
+                    <button class="theme-dot amber" onclick="App.setTheme('amber')"></button>
+                    <button class="theme-dot purple" onclick="App.setTheme('purple')"></button>
+                </div>
+                
+                <button id="btn-mode-toggle" class="sub-tab-btn active" onclick="App.toggleBeginnerMode()" title="Cambiar nivel de interfaz (Novato vs Pro)">
+                    <i class="fa-solid fa-graduation-cap text-amber"></i> <span>Modo Guiado (Novato)</span>
+                </button>
+                <button id="btn-sound-toggle" class="icon-btn-glass" title="Activar/Desactivar Efectos de Audio">
+                    <i class="fa-solid fa-volume-high"></i>
+                </button>
+                <button class="icon-btn-glass" title="Fatiga SNC" onclick="App.switchTab('fatigue')">
+                    <i class="fa-solid fa-heart-pulse"></i>
+                </button>
+                <button class="icon-btn-glass" title="Mi Perfil" onclick="App.switchTab('profile')">
+                    <i class="fa-solid fa-user-gear"></i>
+                </button>
+                
+                <div class="status-chip readiness-chip" id="quick-readiness">
+                    <i class="fa-solid fa-bolt"></i>
+                    <span>CNS: <strong id="quick-readiness-val">92%</strong></span>
+                </div>
+            </div>
+        </header>
+
+        <!-- MAIN CONTENT CONTAINER -->
+        <main class="app-content">
+
+            <!-- SECTION 1: DASHBOARD HERO WITH HD BACKGROUND BANNER -->
+            <section id="tab-dashboard" class="tab-pane active">
+                <div class="dashboard-hero-epic glass-card-epic hero-with-bg">
+                    <div class="hero-bg-overlay" style="background-image: url('img/hero_bg.jpg');"></div>
+                    <div class="hero-content">
+                        <span class="hero-pill-badge"><i class="fa-solid fa-sparkles"></i> PERSONALIZED PERFORMANCE HUB</span>
+                        <h2 class="hero-title">Hola Atleta, <span class="gradient-text-accent" id="dash-user-name">Apex User</span> 👋</h2>
+                        <p class="hero-sub" id="dash-status-msg">Tu organismo está al 92% de capacidad de recuperación. Hoy es un día óptimo para aplicar sobrecarga progresiva en tu sesión de entrenamiento.</p>
+                        
+                        <div class="hero-buttons">
+                            <button id="btn-quick-start-workout" class="btn-epic-primary" onclick="WorkoutPlanner.startGuided1ClickFlow()"><i class="fa-solid fa-wand-magic-sparkles"></i> 🚀 Entrenar Día de Hoy (Asistido 1-Clic)</button>
+                            <button id="btn-quick-add-food-dash" class="btn-epic-secondary"><i class="fa-solid fa-plus"></i> Registrar Alimento Rápido</button>
+                        </div>
+                    </div>
+
+                    <!-- Interactive Readiness Radar Widget -->
+                    <div class="hero-widget glass-card-epic">
+                        <div class="radar-gauge-container" onclick="App.switchTab('fatigue')">
+                            <svg viewBox="0 0 120 120" class="radar-svg">
+                                <circle class="radar-bg" cx="60" cy="60" r="50"></circle>
+                                <circle class="radar-fill" id="dash-radar-fill" cx="60" cy="60" r="50" stroke-dasharray="314.15" stroke-dashoffset="28"></circle>
+                            </svg>
+                            <div class="radar-center">
+                                <span id="dash-radar-val">92%</span>
+                                <small>READINESS</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TU GUÍA PASO A PASO DE HOY (ASISTENTE PARA PRINCIPIANTES) -->
+                <div id="daily-guided-checklist-container" class="margin-top"></div>
+
+                <!-- MACRO DASHBOARD DIALS (4 VISUAL RADIAL GAUGES) -->
+                <div class="grid-layout cols-4 margin-top">
+                    <div class="glass-card-epic macro-dial-card calories">
+                        <div class="dial-header">
+                            <i class="fa-solid fa-fire-flame-curved dial-icon"></i>
+                            <span class="dial-title">Calorías Totales</span>
+                        </div>
+                        <div class="dial-body">
+                            <div class="dial-svg-wrapper">
+                                <svg viewBox="0 0 100 100">
+                                    <circle class="dial-bg" cx="50" cy="50" r="40"></circle>
+                                    <circle class="dial-fill" id="dial-kcal-fill" cx="50" cy="50" r="40" stroke-dasharray="251.2" stroke-dashoffset="251.2"></circle>
+                                </svg>
+                                <span class="dial-pct" id="dial-kcal-pct">0%</span>
+                            </div>
+                            <div class="dial-stats">
+                                <h3 id="dash-kcal-curr">0</h3>
+                                <p>de <span id="dash-kcal-target">2735</span> kcal</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="glass-card-epic macro-dial-card protein">
+                        <div class="dial-header">
+                            <i class="fa-solid fa-drumstick-bite dial-icon"></i>
+                            <span class="dial-title">Proteína (Síntesis)</span>
+                        </div>
+                        <div class="dial-body">
+                            <div class="dial-svg-wrapper">
+                                <svg viewBox="0 0 100 100">
+                                    <circle class="dial-bg" cx="50" cy="50" r="40"></circle>
+                                    <circle class="dial-fill" id="dial-prot-fill" cx="50" cy="50" r="40" stroke-dasharray="251.2" stroke-dashoffset="251.2"></circle>
+                                </svg>
+                                <span class="dial-pct" id="dial-prot-pct">0%</span>
+                            </div>
+                            <div class="dial-stats">
+                                <h3 id="dash-prot-curr">0</h3>
+                                <p>de <span id="dash-prot-target">180</span> g</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="glass-card-epic macro-dial-card carbs">
+                        <div class="dial-header">
+                            <i class="fa-solid fa-wheat-awn dial-icon"></i>
+                            <span class="dial-title">Carbohidratos</span>
+                        </div>
+                        <div class="dial-body">
+                            <div class="dial-svg-wrapper">
+                                <svg viewBox="0 0 100 100">
+                                    <circle class="dial-bg" cx="50" cy="50" r="40"></circle>
+                                    <circle class="dial-fill" id="dial-carb-fill" cx="50" cy="50" r="40" stroke-dasharray="251.2" stroke-dashoffset="251.2"></circle>
+                                </svg>
+                                <span class="dial-pct" id="dial-carb-pct">0%</span>
+                            </div>
+                            <div class="dial-stats">
+                                <h3 id="dash-carb-curr">0</h3>
+                                <p>de <span id="dash-carb-target">360</span> g</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="glass-card-epic macro-dial-card fats">
+                        <div class="dial-header">
+                            <i class="fa-solid fa-avocado dial-icon"></i>
+                            <span class="dial-title">Grasas Hormonales</span>
+                        </div>
+                        <div class="dial-body">
+                            <div class="dial-svg-wrapper">
+                                <svg viewBox="0 0 100 100">
+                                    <circle class="dial-bg" cx="50" cy="50" r="40"></circle>
+                                    <circle class="dial-fill" id="dial-fat-fill" cx="50" cy="50" r="40" stroke-dasharray="251.2" stroke-dashoffset="251.2"></circle>
+                                </svg>
+                                <span class="dial-pct" id="dial-fat-pct">0%</span>
+                            </div>
+                            <div class="dial-stats">
+                                <h3 id="dash-fat-curr">0</h3>
+                                <p>de <span id="dash-fat-target">63</span> g</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 1-TAP FAST FOOD LOGGING GALLERY WITH REAL PHOTO CARDS -->
+                <div class="glass-card-epic margin-top">
+                    <div class="card-header-epic">
+                        <h2><i class="fa-solid fa-camera-retro text-emerald"></i> Galería Nutricional Interactiva (1-Clic)</h2>
+                        <span class="subtitle">Toca cualquier plato real para sumar macros al diario de hoy</span>
+                    </div>
+                    <div class="food-photo-grid">
+                        <div class="food-photo-card" onclick="FoodTracker.quickAddFood('pechuga-pollo', 200, 'almuerzo')">
+                            <div class="photo-img-wrapper">
+                                <img src="img/chicken.jpg" alt="Pechuga de Pollo">
+                                <span class="photo-badge">+46g Proteína</span>
+                            </div>
+                            <div class="photo-card-body">
+                                <h4>200g Pechuga de Pollo</h4>
+                                <p>240 kcal | Magro muscular</p>
+                                <button class="btn-sm btn-epic-primary"><i class="fa-solid fa-plus"></i> Sumar 1-Clic</button>
+                            </div>
+                        </div>
+
+                        <div class="food-photo-card" onclick="FoodTracker.quickAddFood('whey-protein', 30, 'post-workout')">
+                            <div class="photo-img-wrapper">
+                                <img src="img/whey.jpg" alt="Batido de Proteína Whey">
+                                <span class="photo-badge">+24g Proteína</span>
+                            </div>
+                            <div class="photo-card-body">
+                                <h4>1 Cazo Proteína Whey</h4>
+                                <p>112 kcal | Absorción rápida</p>
+                                <button class="btn-sm btn-epic-primary"><i class="fa-solid fa-plus"></i> Sumar 1-Clic</button>
+                            </div>
+                        </div>
+
+                        <div class="food-photo-card" onclick="FoodTracker.quickAddFood('avena-integral', 80, 'desayuno')">
+                            <div class="photo-img-wrapper">
+                                <img src="img/oats.jpg" alt="Porridge de Avena y Frutos Rojos">
+                                <span class="photo-badge-carb">+48g Carbohidratos</span>
+                            </div>
+                            <div class="photo-card-body">
+                                <h4>80g Copos de Avena</h4>
+                                <p>296 kcal | Glucógeno muscular</p>
+                                <button class="btn-sm btn-epic-primary"><i class="fa-solid fa-plus"></i> Sumar 1-Clic</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION: MI PLAN IA & CALENDARIO -->
+            <section id="tab-myplan" class="tab-pane">
+                <div class="glass-card-epic" style="padding: 28px;">
+                    <!-- Sub-navigation for My Plan -->
+                    <div class="sub-nav-tabs" style="display:flex; gap:12px; margin-bottom:24px; border-bottom:1px solid var(--border-glass); padding-bottom:16px;">
+                        <button class="sub-tab-btn active" onclick="App.showPlanSubTab('summary')">
+                            <i class="fa-solid fa-list-check text-emerald"></i> <span>Tu Plan Generado</span>
+                        </button>
+                        <button class="sub-tab-btn" onclick="App.showPlanSubTab('calendar')">
+                            <i class="fa-solid fa-calendar-days text-cyan"></i> <span>Calendario del Mesociclo</span>
+                        </button>
+                        <button class="sub-tab-btn" onclick="App.showPlanSubTab('wizard')">
+                            <i class="fa-solid fa-wand-magic-sparkles text-amber"></i> <span>Test de 8 Pasos</span>
+                        </button>
+                    </div>
+
+                    <!-- Sub-pane 1: Plan Summary -->
+                    <div id="plan-sub-summary" class="sub-pane active">
+                        <div id="ai-plan-summary-container">
+                            <!-- Filled dynamically -->
+                        </div>
+                    </div>
+
+                    <!-- Sub-pane 2: Calendar -->
+                    <div id="plan-sub-calendar" class="sub-pane" style="display:none;">
+                        <div class="flex-between" style="margin-bottom: 20px;">
+                            <div>
+                                <h3 style="font-family: var(--font-heading); font-size: 20px;"><i class="fa-solid fa-calendar-days text-cyan"></i> Vista Mensual de Entrenamientos</h3>
+                                <p style="font-size: 13px; color: var(--text-muted);">Verde = Entrenamiento | Gris = Descanso | Naranja = Deload</p>
+                            </div>
+                            <button class="btn-epic-primary" onclick="CalendarView.exportToICS()">
+                                <i class="fa-solid fa-file-export"></i> Exportar a Calendario (.ics)
+                            </button>
+                        </div>
+                        <div id="calendar-view-container">
+                            <!-- Filled dynamically by CalendarView -->
+                        </div>
+                    </div>
+
+                    <!-- Sub-pane 3: Wizard -->
+                    <div id="plan-sub-wizard" class="sub-pane" style="display:none;">
+                        <div id="ai-plan-wizard-container">
+                            <!-- Filled dynamically by OnboardingWizard -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION: EVOLUCIÓN & LOGROS -->
+            <section id="tab-progress" class="tab-pane">
+                <div class="glass-card-epic" style="padding: 28px;">
+                    <!-- Sub-navigation for Progress -->
+                    <div class="sub-nav-tabs" style="display:flex; gap:12px; margin-bottom:24px; border-bottom:1px solid var(--border-glass); padding-bottom:16px;">
+                        <button class="sub-tab-btn active" onclick="App.showProgressSubTab('checkin')">
+                            <i class="fa-solid fa-clipboard-check text-amber"></i> <span>Check-In & Peso</span>
+                        </button>
+                        <button class="sub-tab-btn" onclick="App.showProgressSubTab('photos')">
+                            <i class="fa-solid fa-camera text-emerald"></i> <span>Fotos de Progreso</span>
+                        </button>
+                        <button class="sub-tab-btn" onclick="App.showProgressSubTab('achievements')">
+                            <i class="fa-solid fa-trophy text-purple"></i> <span>Logros & Medallas</span>
+                        </button>
+                        <button class="sub-tab-btn" onclick="App.showProgressSubTab('volume')">
+                            <i class="fa-solid fa-chart-column text-cyan"></i> <span>Balance Muscular</span>
+                        </button>
+                        <button class="sub-tab-btn" onclick="App.showProgressSubTab('anatomy')">
+                            <i class="fa-solid fa-child-reaching text-emerald"></i> <span>Anatomía 2D</span>
+                        </button>
+                    </div>
+
+                    <!-- Sub-pane 1: Check-in & Weight -->
+                    <div id="prog-sub-checkin" class="sub-pane active">
+                        <div class="grid-layout cols-2">
+                            <div style="padding: 12px;">
+                                <h3 style="font-family: var(--font-heading); margin-bottom: 16px;"><i class="fa-solid fa-clipboard-check text-amber"></i> Registro Semanal</h3>
+                                <div id="weekly-checkin-container"></div>
+                            </div>
+                            <div style="padding: 12px;">
+                                <h3 style="font-family: var(--font-heading); margin-bottom: 16px;"><i class="fa-solid fa-chart-line text-emerald"></i> Gráfica de Peso Corporal</h3>
+                                <div id="weight-chart-container" style="height: 220px; width: 100%;"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sub-pane 2: Progress Photos -->
+                    <div id="prog-sub-photos" class="sub-pane" style="display:none;">
+                        <div class="flex-between" style="margin-bottom: 16px;">
+                            <div>
+                                <h3 style="font-family: var(--font-heading); font-size: 20px;"><i class="fa-solid fa-camera text-emerald"></i> Galería de Fotos de Evolución</h3>
+                                <p style="font-size: 13px; color: var(--text-muted);">Compara tu cambio físico real semana a semana.</p>
+                            </div>
+                            <label class="btn-epic-primary" style="cursor: pointer;">
+                                <i class="fa-solid fa-upload"></i> Subir Nueva Foto
+                                <input type="file" accept="image/*" style="display:none;" onchange="if(this.files[0]) ProgressPhotos.addPhoto(this.files[0])">
+                            </label>
+                        </div>
+                        <div id="progress-photos-container"></div>
+                    </div>
+
+                    <!-- Sub-pane 3: Achievements -->
+                    <div id="prog-sub-achievements" class="sub-pane" style="display:none;">
+                        <div style="text-align: center; margin-bottom: 24px;">
+                            <h3 style="font-family: var(--font-heading); font-size: 24px;"><i class="fa-solid fa-trophy text-purple"></i> Insignias & Medallas Desbloqueadas</h3>
+                            <p style="color: var(--text-muted); margin-top: 4px;">Demuestra tu constancia y desbloquea insignias a medida que entrenas.</p>
+                        </div>
+                        <div id="achievements-panel-container"></div>
+                    </div>
+
+                    <!-- Sub-pane 4: Muscle Volume Balance -->
+                    <div id="prog-sub-volume" class="sub-pane" style="display:none;">
+                        <div id="muscle-volume-dashboard-container"></div>
+                    </div>
+
+                    <!-- Sub-pane 5: Anatomy 2D (relocated) -->
+                    <div id="prog-sub-anatomy" class="sub-pane" style="display:none;">
+                        <div id="anatomy-relocated-container">
+                            <!-- Rendered by App.showProgressSubTab('anatomy') -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 2: WORKOUT SESSION HUD -->
+            <section id="tab-workout" class="tab-pane">
+                <div class="grid-layout cols-3">
+                    <div class="glass-card-epic layout-card">
+                        <div class="card-header-epic">
+                            <h2><i class="fa-solid fa-list-check text-cyan"></i> Plan de Entrenamiento</h2>
+                            <button id="btn-change-routine" class="btn-sm btn-epic-secondary"><i class="fa-solid fa-arrows-rotate"></i> Seleccionar Programa</button>
+                        </div>
+                        <div id="active-routine-info" class="routine-summary-box">
+                            <!-- Filled dynamically -->
+                        </div>
+                        <div class="split-days-list" id="split-days-container">
+                            <!-- Workout days buttons -->
+                        </div>
+                    </div>
+
+                    <div class="glass-card-epic layout-card span-2">
+                        <div class="card-header-epic flex-between">
+                            <div>
+                                <h2 id="current-workout-title"><i class="fa-solid fa-fire text-emerald"></i> Sesión en Vivo</h2>
+                                <p class="subtitle" id="current-workout-sub">Selecciona un día de entrenamiento a la izquierda para cargar los ejercicios</p>
+                            </div>
+                            <div class="workout-hud-actions">
+                                <div class="timer-hud-widget" id="rest-timer">
+                                    <i class="fa-solid fa-stopwatch"></i>
+                                    <span id="timer-count">00:00</span>
+                                </div>
+                                <button id="btn-finish-workout" class="btn-epic-primary" disabled>
+                                    <i class="fa-solid fa-trophy"></i> Finalizar Sesión
+                                </button>
+                            </div>
+                        </div>
+
+                        <div id="workout-exercises-container" class="exercises-log-list">
+                            <div class="empty-hud-state">
+                                <div class="empty-hud-icon"><i class="fa-solid fa-dumbbell"></i></div>
+                                <h3>Ninguna Sesión Activa</h3>
+                                <p>Haz clic en uno de los días de entrenamiento a la izquierda. Cada ejercicio incluye su ilustración en HD, guía de ejecución biomecánica y contador sonoro de descanso.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 3: NUTRITION & DIARY -->
+            <section id="tab-nutrition" class="tab-pane">
+                <div class="grid-layout cols-3">
+                    <!-- Carb Cycling & Metabolic Mode Selector -->
+                    <div class="glass-card-epic span-3 flex-between" style="flex-wrap: wrap; gap: 14px; padding: 20px 28px;">
+                        <div>
+                            <h3 style="font-family: var(--font-heading); font-size: 18px; display: flex; align-items: center; gap: 8px;">
+                                <i class="fa-solid fa-arrows-rotate text-cyan"></i> Ciclado de Carbohidratos & Estrategia Diaria
+                            </h3>
+                            <p style="font-size: 12px; color: var(--text-muted); margin-top: 2px;">Recalibra automáticamente tus macronutrientes según la exigencia física del día</p>
+                        </div>
+                        <div class="sub-nav-tabs" style="margin: 0; padding: 0; border: none;">
+                            <button id="btn-carb-train" class="sub-tab-btn active" onclick="FoodTracker.setDayType('training')">
+                                <i class="fa-solid fa-bolt text-amber"></i> <span>Día de Entrenamiento (Alta Carga)</span>
+                            </button>
+                            <button id="btn-carb-rest" class="sub-tab-btn" onclick="FoodTracker.setDayType('rest')">
+                                <i class="fa-solid fa-bed text-cyan"></i> <span>Día de Descanso (Baja Carga)</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Macro Target Bars -->
+                    <div class="glass-card-epic span-2">
+                        <div class="nutrition-macro-bars">
+                            <div class="macro-bar-item calories">
+                                <div class="bar-top">
+                                    <span><i class="fa-solid fa-fire"></i> Calorías</span>
+                                    <strong><span id="kcal-consumed">0</span> / <span id="kcal-target">2735</span> kcal</strong>
+                                </div>
+                                <div class="bar-track"><div class="bar-fill" id="kcal-bar" style="width: 0%"></div></div>
+                            </div>
+                            <div class="macro-bar-item protein">
+                                <div class="bar-top">
+                                    <span><i class="fa-solid fa-drumstick-bite"></i> Proteína</span>
+                                    <strong><span id="prot-consumed">0</span> / <span id="prot-target">180</span> g</strong>
+                                </div>
+                                <div class="bar-track"><div class="bar-fill" id="prot-bar" style="width: 0%"></div></div>
+                            </div>
+                            <div class="macro-bar-item carbs">
+                                <div class="bar-top">
+                                    <span><i class="fa-solid fa-wheat-awn"></i> Carbohidratos</span>
+                                    <strong><span id="carb-consumed">0</span> / <span id="carb-target">360</span> g</strong>
+                                </div>
+                                <div class="bar-track"><div class="bar-fill" id="carb-bar" style="width: 0%"></div></div>
+                            </div>
+                            <div class="macro-bar-item fats">
+                                <div class="bar-top">
+                                    <span><i class="fa-solid fa-avocado"></i> Grasas</span>
+                                    <strong><span id="fat-consumed">0</span> / <span id="fat-target">63</span> g</strong>
+                                </div>
+                                <div class="bar-track"><div class="bar-fill" id="fat-bar" style="width: 0%"></div></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Water Intake Tracker Widget -->
+                    <div class="glass-card-epic span-1" style="display: flex; flex-direction: column; justify-content: space-between;">
+                        <div class="card-header-epic" style="margin-bottom: 12px; padding-bottom: 8px;">
+                            <h2><i class="fa-solid fa-bottle-water text-cyan"></i> Hidratación Diaria</h2>
+                            <span id="water-pct-text" style="font-weight: 800; color: var(--accent-cyan);">0%</span>
+                        </div>
+                        <div style="text-align: center; margin: 10px 0;">
+                            <h3 style="font-size: 28px; font-family: var(--font-heading); color: var(--text-main);" id="water-current-ml">0.00 L</h3>
+                            <p style="font-size: 12px; color: var(--text-muted);">de meta recomendada <span id="water-target-ml">2.75 L</span></p>
+                            <div style="width: 100%; height: 8px; background: rgba(255,255,255,0.08); border-radius: 99px; margin-top: 12px; overflow: hidden;">
+                                <div id="water-progress-bar" style="height: 100%; width: 0%; background: linear-gradient(90deg, #00f0ff, #00ff9d); transition: width 0.4s ease;"></div>
+                            </div>
+                        </div>
+                        <div style="display: flex; gap: 8px; margin-top: 12px;">
+                            <button class="btn-sm btn-epic-secondary" style="flex: 1;" onclick="FoodTracker.addWater(250)">
+                                <i class="fa-solid fa-glass-water text-cyan"></i> +250ml
+                            </button>
+                            <button class="btn-sm btn-epic-secondary" style="flex: 1;" onclick="FoodTracker.addWater(500)">
+                                <i class="fa-solid fa-bottle-water text-emerald"></i> +500ml
+                            </button>
+                            <button class="btn-sm btn-epic-secondary" onclick="FoodTracker.resetWater()" title="Reiniciar contador">
+                                <i class="fa-solid fa-rotate-left"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Daily Meals Container -->
+                    <div class="glass-card-epic layout-card span-2">
+                        <div class="card-header-epic flex-between" style="flex-wrap: wrap; gap: 10px;">
+                            <h2><i class="fa-solid fa-calendar-day text-cyan"></i> Diario de Comidas de Hoy</h2>
+                            <div style="display:flex; gap:10px;">
+                                <button onclick="SmartMealPlanner.renderMealPlanModal()" class="btn-epic-primary"><i class="fa-solid fa-wand-magic-sparkles"></i> Generar Menú Inteligente</button>
+                                <button id="btn-open-food-modal" class="btn-epic-secondary"><i class="fa-solid fa-magnifying-glass"></i> Buscador de Alimentos</button>
+                            </div>
+                        </div>
+                        <div class="meals-list" id="meals-container">
+                            <!-- Dynamic meal rows -->
+                        </div>
+                    </div>
+
+                    <!-- Nutritionist Feedback & Macro Matcher -->
+                    <div class="glass-card-epic layout-card">
+                        <div class="card-header-epic">
+                            <h2><i class="fa-solid fa-user-doctor text-emerald"></i> Diagnóstico Nutricional</h2>
+                        </div>
+                        <div id="nutritionist-feedback" class="feedback-box">
+                            <!-- Dynamic feedback -->
+                        </div>
+
+                        <div class="macro-matcher-epic">
+                            <h3><i class="fa-solid fa-wand-magic-sparkles text-amber"></i> Macro-Matcher Inteligente</h3>
+                            <p class="subtitle">Toca cualquier sugerencia para completar lo que te falta:</p>
+                            <div id="macro-suggestions-list" class="suggestions-list-epic">
+                                <!-- Suggested real food cards -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Preset Fitness Combo Meals Gallery (Salto Visual e Interactivo) -->
+                    <div class="glass-card-epic span-3">
+                        <div class="card-header-epic">
+                            <h2><i class="fa-solid fa-utensils text-amber"></i> Combinaciones Fitness 1-Clic (Combos de Chef Deportivo)</h2>
+                        </div>
+                        <p class="subtitle" style="margin-bottom: 16px;">Platos completos equilibrados en macronutrientes listos para registrar de un toque:</p>
+                        
+                        <div class="grid-layout cols-4">
+                            <div class="food-photo-card" onclick="FoodTracker.addFitnessComboPlate('bowl-pollo', 'almuerzo')">
+                                <div class="photo-img-wrapper">
+                                    <img src="img/chicken.jpg" alt="Bowl Fit Pollo Arroz Brocoli">
+                                    <span class="photo-badge">+42g Proteína</span>
+                                </div>
+                                <div class="photo-card-body">
+                                    <h4>Bowl Pollo & Arroz Basmati</h4>
+                                    <p>490 kcal | Pollo (200g), Arroz (90g), AOVE (10ml), Brócoli</p>
+                                    <button class="btn-sm btn-epic-primary" style="width: 100%;"><i class="fa-solid fa-plus"></i> Sumar Combo 1-Clic</button>
+                                </div>
+                            </div>
+
+                            <div class="food-photo-card" onclick="FoodTracker.addFitnessComboPlate('porridge-proteico', 'desayuno')">
+                                <div class="photo-img-wrapper">
+                                    <img src="img/oats.jpg" alt="Porridge Avena Whey Platano">
+                                    <span class="photo-badge-carb">+52g Carbohidratos</span>
+                                </div>
+                                <div class="photo-card-body">
+                                    <h4>Porridge Avena & Whey</h4>
+                                    <p>410 kcal | Avena (80g), Whey (30g), Plátano, Almendras</p>
+                                    <button class="btn-sm btn-epic-primary" style="width: 100%;"><i class="fa-solid fa-plus"></i> Sumar Combo 1-Clic</button>
+                                </div>
+                            </div>
+
+                            <div class="food-photo-card" onclick="FoodTracker.addFitnessComboPlate('huevos-tostada', 'desayuno')">
+                                <div class="photo-img-wrapper">
+                                    <img src="img/whey.jpg" alt="Huevos Tostada Masa Madre Pavo">
+                                    <span class="photo-badge">+30g Proteína</span>
+                                </div>
+                                <div class="photo-card-body">
+                                    <h4>Tostada Integral & Huevos</h4>
+                                    <p>380 kcal | Huevos (2uds), Masa Madre (80g), Pavo, Aguacate</p>
+                                    <button class="btn-sm btn-epic-primary" style="width: 100%;"><i class="fa-solid fa-plus"></i> Sumar Combo 1-Clic</button>
+                                </div>
+                            </div>
+
+                            <div class="food-photo-card" onclick="FoodTracker.addFitnessComboPlate('salmon-quinoa', 'cena')">
+                                <div class="photo-img-wrapper">
+                                    <img src="img/hero_bg.jpg" alt="Salmón Quinoa Espárragos">
+                                    <span class="photo-badge">+38g Proteína (Omega-3)</span>
+                                </div>
+                                <div class="photo-card-body">
+                                    <h4>Salmón & Quinoa Real</h4>
+                                    <p>510 kcal | Salmón (180g), Quinoa (80g), Espárragos</p>
+                                    <button class="btn-sm btn-epic-primary" style="width: 100%;"><i class="fa-solid fa-plus"></i> Sumar Combo 1-Clic</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 4: FATIGUE & READINESS -->
+            <section id="tab-fatigue" class="tab-pane">
+                <div class="grid-layout cols-2">
+                    <div class="glass-card-epic layout-card">
+                        <div class="card-header-epic">
+                            <h2><i class="fa-solid fa-sliders text-emerald"></i> Test Diario de Recuperación SNC</h2>
+                        </div>
+                        <form id="readiness-form" class="readiness-form">
+                            <div class="form-group-epic">
+                                <label><i class="fa-solid fa-moon"></i> Horas de Sueño y Calidad</label>
+                                <input type="range" id="sleep-score" min="1" max="10" value="8" class="range-slider-epic">
+                                <div class="range-labels"><span>Mal Sueño (1)</span><span id="sleep-score-val">8 hrs / Reparador</span><span>10 hrs Profundo</span></div>
+                            </div>
+                            <div class="form-group-epic">
+                                <label><i class="fa-solid fa-child-reaching"></i> Agujetas / Dolor Muscular</label>
+                                <input type="range" id="soreness-score" min="1" max="10" value="3" class="range-slider-epic">
+                                <div class="range-labels"><span>Sin Dolor (1)</span><span id="soreness-score-val">3 - Leve</span><span>Agujetas Máximas (10)</span></div>
+                            </div>
+                            <div class="form-group-epic">
+                                <label><i class="fa-solid fa-brain"></i> Nivel de Estrés Mental</label>
+                                <input type="range" id="stress-score" min="1" max="10" value="3" class="range-slider-epic">
+                                <div class="range-labels"><span>Tranquilo (1)</span><span id="stress-score-val">3 - Normal</span><span>Estrés Alto (10)</span></div>
+                            </div>
+                            <div class="form-group-epic">
+                                <label><i class="fa-solid fa-battery-half"></i> Energía & Motivación</label>
+                                <input type="range" id="energy-score" min="1" max="10" value="8" class="range-slider-epic">
+                                <div class="range-labels"><span>Exhausto (1)</span><span id="energy-score-val">8 - Alta</span><span>100% Energía (10)</span></div>
+                            </div>
+                            <button type="submit" class="btn-epic-primary btn-block"><i class="fa-solid fa-calculator"></i> Evaluar Estado de Recuperación</button>
+                        </form>
+                    </div>
+
+                    <div class="glass-card-epic layout-card">
+                        <div class="card-header-epic">
+                            <h2><i class="fa-solid fa-gauge-high text-cyan"></i> Nivel de Preparación Obtenido</h2>
+                        </div>
+                        <div class="readiness-result-epic">
+                            <div class="readiness-big-gauge">
+                                <svg viewBox="0 0 120 120">
+                                    <circle class="gauge-bg" cx="60" cy="60" r="50"></circle>
+                                    <circle class="gauge-fill" id="readiness-circle" cx="60" cy="60" r="50" stroke-dasharray="314.15" stroke-dashoffset="31.4"></circle>
+                                </svg>
+                                <div class="gauge-center-text">
+                                    <span id="readiness-percent">90%</span>
+                                    <small id="readiness-status">ÓPTIMO</small>
+                                </div>
+                            </div>
+                            <div id="readiness-recommendation" class="recommendation-card">
+                                <h3><i class="fa-solid fa-shield-halved text-emerald"></i> Diagnóstico del Sistema Nervioso</h3>
+                                <p>Tu cuerpo está completamente preparado. Puedes aplicar Sobrecarga Progresiva hoy e intentar mejorar cargas con RIR 1-0.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 5: ANATOMY & MUSCLE HEATMAP 2D -->
+            <section id="tab-anatomy" class="tab-pane">
+                <div class="grid-layout cols-3">
+                    <div class="glass-card-epic span-1 text-center">
+                        <div class="card-header-epic text-center">
+                            <h2><i class="fa-solid fa-child-reaching text-emerald"></i> Anatomía Muscular 2D</h2>
+                        </div>
+                        <p class="subtitle">Haz clic en cualquier grupo muscular para examinar su volumen semanal</p>
+
+                        <div class="heatmap-legend-epic">
+                            <span class="legend-chip mev"><span class="dot"></span> MEV (Mantenimiento)</span>
+                            <span class="legend-chip mav"><span class="dot"></span> MAV (Óptimo)</span>
+                            <span class="legend-chip mrv"><span class="dot"></span> MRV (Límite)</span>
+                        </div>
+
+                        <div class="body-heatmap-wrapper">
+                            <svg id="muscle-svg" viewBox="0 0 300 450" class="body-svg-epic">
+                                <g id="muscle-chest" class="muscle-group mav" onclick="HeatMapEngine.onMuscleClick('Pecho')">
+                                    <path d="M 115 110 C 135 110, 148 115, 150 135 C 135 145, 115 140, 115 110 Z" />
+                                    <path d="M 185 110 C 165 110, 152 115, 150 135 C 165 145, 185 140, 185 110 Z" />
+                                    <text x="150" y="125" class="muscle-label">PECHO</text>
+                                </g>
+                                <g id="muscle-delts" class="muscle-group mav" onclick="HeatMapEngine.onMuscleClick('Hombros')">
+                                    <path d="M 95 105 C 105 105, 115 110, 112 130 C 95 130, 90 118, 95 105 Z" />
+                                    <path d="M 205 105 C 195 105, 185 110, 188 130 C 205 130, 210 118, 205 105 Z" />
+                                    <text x="150" y="98" class="muscle-label">HOMBROS</text>
+                                </g>
+                                <g id="muscle-lats" class="muscle-group mev" onclick="HeatMapEngine.onMuscleClick('Espalda')">
+                                    <path d="M 110 145 C 120 150, 125 180, 130 200 C 115 190, 105 170, 110 145 Z" />
+                                    <path d="M 190 145 C 180 150, 175 180, 170 200 C 185 190, 195 170, 190 145 Z" />
+                                    <text x="150" y="170" class="muscle-label">DORSAL</text>
+                                </g>
+                                <g id="muscle-biceps" class="muscle-group mev" onclick="HeatMapEngine.onMuscleClick('Bíceps')">
+                                    <path d="M 90 135 C 100 135, 102 165, 92 170 C 85 165, 83 145, 90 135 Z" />
+                                    <path d="M 210 135 C 200 135, 198 165, 208 170 C 215 165, 217 145, 210 135 Z" />
+                                    <text x="80" y="152" class="muscle-label">BÍCEPS</text>
+                                </g>
+                                <g id="muscle-abs" class="muscle-group mav" onclick="HeatMapEngine.onMuscleClick('Abdomen')">
+                                    <rect x="135" y="145" width="30" height="60" rx="6" />
+                                    <text x="150" y="218" class="muscle-label">ABS</text>
+                                </g>
+                                <g id="muscle-quads" class="muscle-group mav" onclick="HeatMapEngine.onMuscleClick('Cuádriceps')">
+                                    <path d="M 115 220 C 145 220, 140 310, 125 320 C 110 310, 105 240, 115 220 Z" />
+                                    <path d="M 185 220 C 155 220, 160 310, 175 320 C 190 310, 195 240, 185 220 Z" />
+                                    <text x="150" y="270" class="muscle-label">CUÁDRICEPS</text>
+                                </g>
+                                <g id="muscle-hamstrings" class="muscle-group mev" onclick="HeatMapEngine.onMuscleClick('Isquios')">
+                                    <path d="M 125 325 L 125 390 L 110 390 L 110 325 Z" />
+                                    <path d="M 175 325 L 175 390 L 190 390 L 190 325 Z" />
+                                    <text x="150" y="360" class="muscle-label">ISQUIOS</text>
+                                </g>
+                            </svg>
+                        </div>
+
+                        <div id="muscle-info-card" class="muscle-card-interactive" style="margin-bottom: 16px;">
+                            <h4 id="muscle-detail-name">👉 Toca un músculo en la silueta</h4>
+                            <p id="muscle-detail-text" style="font-size: 13px; color: var(--text-muted);">Verás las series recomendadas y el volumen semanal óptimo.</p>
+                        </div>
+
+                        <!-- Scientific Muscle Volume Dashboard Container -->
+                        <div id="muscle-volume-dashboard-container" style="text-align: left;">
+                            <!-- Filled dynamically by HeatMapEngine -->
+                        </div>
+                    </div>
+
+                    <!-- 1RM Calculator & PR Table -->
+                    <div class="glass-card-epic layout-card span-2">
+                        <div class="card-header-epic">
+                            <h2><i class="fa-solid fa-trophy text-amber"></i> Récords Personales (PRs) & Estimador de 1RM</h2>
+                        </div>
+                        <div class="pr-calculator-epic">
+                            <form id="form-calc-1rm" class="form-inline grid-3-cols">
+                                <div class="form-group-epic">
+                                    <label>Ejercicio</label>
+                                    <select id="calc-exercise" class="form-control-epic">
+                                        <option value="Press Banca Plano">Press Banca Plano</option>
+                                        <option value="Sentadilla Trasera">Sentadilla Trasera</option>
+                                        <option value="Peso Muerto">Peso Muerto Convencional</option>
+                                        <option value="Press Militar">Press Militar con Barra</option>
+                                    </select>
+                                </div>
+                                <div class="form-group-epic">
+                                    <label>Peso Levantado (kg)</label>
+                                    <input type="number" id="calc-weight" class="form-control-epic" value="100" min="1">
+                                </div>
+                                <div class="form-group-epic">
+                                    <label>Repeticiones Realizadas</label>
+                                    <input type="number" id="calc-reps" class="form-control-epic" value="6" min="1" max="20">
+                                </div>
+                            </form>
+
+                            <div class="rm-result-grid">
+                                <div class="rm-card-epic">
+                                    <span>1RM Estimado (Brzycki)</span>
+                                    <h3 id="res-1rm-brzycki">116.7 kg</h3>
+                                </div>
+                                <div class="rm-card-epic">
+                                    <span>1RM Estimado (Epley)</span>
+                                    <h3 id="res-1rm-epley">120.0 kg</h3>
+                                </div>
+                                <div class="rm-card-epic highlight">
+                                    <span>Nivel de Fuerza Absoluta</span>
+                                    <h3 id="res-strength-tier" class="gradient-text">AVANZADO</h3>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="pr-table-wrapper margin-top">
+                            <h3><i class="fa-solid fa-award text-cyan"></i> Historial de Marcas Máximas</h3>
+                            <table class="data-table-epic">
+                                <thead>
+                                    <tr>
+                                        <th>Ejercicio</th>
+                                        <th>Mejor Carga</th>
+                                        <th>Reps</th>
+                                        <th>1RM Estimado</th>
+                                        <th>Fecha</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="pr-table-body">
+                                    <!-- Dynamic rows -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 6: USER PROFILE -->
+            <section id="tab-profile" class="tab-pane">
+                <div class="grid-layout cols-2">
+                    <div class="glass-card-epic layout-card">
+                        <div class="card-header-epic">
+                            <h2><i class="fa-solid fa-id-card text-emerald"></i> Datos Biométricos del Atleta</h2>
+                        </div>
+                        <form id="profile-form" class="profile-form">
+                            <div class="form-row">
+                                <div class="form-group-epic">
+                                    <label>Edad (años)</label>
+                                    <input type="number" id="user-age" class="form-control-epic" value="26" required>
+                                </div>
+                                <div class="form-group-epic">
+                                    <label>Sexo Biológico</label>
+                                    <select id="user-gender" class="form-control-epic">
+                                        <option value="male">Hombre</option>
+                                        <option value="female">Mujer</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group-epic">
+                                    <label>Peso Corporal (kg)</label>
+                                    <input type="number" step="0.1" id="user-weight" class="form-control-epic" value="78.5" required>
+                                </div>
+                                <div class="form-group-epic">
+                                    <label>Altura (cm)</label>
+                                    <input type="number" id="user-height" class="form-control-epic" value="178" required>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group-epic">
+                                    <label>% Grasa Corporal Estimado</label>
+                                    <input type="number" step="0.5" id="user-bodyfat" class="form-control-epic" value="14.0">
+                                </div>
+                                <div class="form-group-epic">
+                                    <label>Nivel de Actividad Diaria</label>
+                                    <select id="user-activity" class="form-control-epic">
+                                        <option value="1.2">Sedentario (Oficina / Poco movimiento)</option>
+                                        <option value="1.375">Moderado (8k-10k pasos/día)</option>
+                                        <option value="1.55" selected>Activo (Gym 4-5d + 10k pasos)</option>
+                                        <option value="1.725">Muy Activo (Gym 6d + trabajo activo)</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group-epic">
+                                <label>Objetivo Nutricional Estricto</label>
+                                <select id="user-goal" class="form-control-epic">
+                                    <option value="hypertrophy">Superávit Magro (+250 kcal) - Hipertrofia</option>
+                                    <option value="recomp" selected>Recomposición Corporal (Normocalórica)</option>
+                                    <option value="cut">Definición Moderada (-400 kcal) - Pérdida de Grasa</option>
+                                    <option value="aggressive-cut">Definición Estricta (-600 kcal)</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn-epic-primary btn-block"><i class="fa-solid fa-floppy-disk"></i> Guardar y Recalcular Metas</button>
+                        </form>
+                    </div>
+
+                    <div class="glass-card-epic layout-card">
+                        <div class="card-header-epic">
+                            <h2><i class="fa-solid fa-calculator text-cyan"></i> Desglose Metabólico Calculado</h2>
+                        </div>
+                        <div class="metabolic-results-grid">
+                            <div class="metabolic-stat-card">
+                                <span>Tasa Metabólica Basal (BMR)</span>
+                                <h3 id="res-bmr">1,765 kcal/día</h3>
+                            </div>
+                            <div class="metabolic-stat-card">
+                                <span>Masa Magra (Katch-McArdle)</span>
+                                <h3 id="res-lbm">67.5 kg</h3>
+                            </div>
+                            <div class="metabolic-stat-card">
+                                <span>Gasto Energético Total (TDEE)</span>
+                                <h3 id="res-tdee">2,735 kcal/día</h3>
+                            </div>
+                            <div class="metabolic-stat-card highlight">
+                                <span>Meta Calórica Diaria</span>
+                                <h3 id="res-target-calories">2,735 kcal/día</h3>
+                            </div>
+                        </div>
+
+                        <div class="macro-ratios-box margin-top">
+                            <h3><i class="fa-solid fa-pie-chart text-amber"></i> Ratios de Macros Élite</h3>
+                            <ul class="ratio-list-epic">
+                                <li><strong>Proteína:</strong> <span id="summary-prot">2.3 g/kg (180g)</span> - Máxima síntesis proteica</li>
+                                <li><strong>Grasas:</strong> <span id="summary-fat">0.8 g/kg (63g)</span> - Salud hormonal y articular</li>
+                                <li><strong>Carbohidratos:</strong> <span id="summary-carb">Restante (360g)</span> - Recarga de glucógeno</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- MODAL: DETALLES DE EJERCICIO BIOMECÁNICO Y VÍDEO -->
+    <div id="modal-exercise-detail" class="modal-backdrop">
+        <div class="modal-card-epic glass-card-epic">
+            <div class="modal-header-epic">
+                <h3 id="ex-detail-modal-title"><i class="fa-solid fa-circle-play text-emerald"></i> Guía Biomecánica del Ejercicio</h3>
+                <button class="modal-close-btn" onclick="document.getElementById('modal-exercise-detail').classList.remove('active')">&times;</button>
+            </div>
+            <div class="modal-body-epic">
+                <div id="ex-detail-media-container" class="exercise-detail-media-box">
+                    <!-- Dynamic Video or Image -->
+                </div>
+                <div class="exercise-detail-info-box margin-top">
+                    <h4 id="ex-detail-name">Nombre del Ejercicio</h4>
+                    <div id="ex-detail-tags" class="ex-tags-bar margin-v">
+                        <!-- Dynamic badges -->
+                    </div>
+
+                    <div class="guide-steps-box">
+                        <h4><i class="fa-solid fa-list-ol text-cyan"></i> Ejecución Paso a Paso:</h4>
+                        <ol id="ex-detail-steps-list">
+                            <!-- Steps -->
+                        </ol>
+                    </div>
+
+                    <div class="guide-mistakes-box margin-top">
+                        <h4><i class="fa-solid fa-triangle-exclamation text-rose"></i> Errores Comunes a Evitar:</h4>
+                        <p id="ex-detail-mistakes">--</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: BUSCADOR DE ALIMENTOS REALES -->
+    <div id="modal-add-food" class="modal-backdrop">
+        <div class="modal-card-epic glass-card-epic">
+            <div class="modal-header-epic">
+                <h3><i class="fa-solid fa-magnifying-glass text-emerald"></i> Buscador de Alimentos Reales</h3>
+                <button class="modal-close-btn" id="btn-close-food-modal">&times;</button>
+            </div>
+            <div class="modal-body-epic">
+                <div class="search-input-wrapper">
+                    <i class="fa-solid fa-search"></i>
+                    <input type="text" id="food-search-input" placeholder="Buscar en 3M+ alimentos (Pechuga, Hacendado, Carrefour, Proteína, Snacks...)">
+                </div>
+
+                <div style="margin: 12px 0 6px; display: flex; justify-content: space-between; align-items: center;">
+                    <span style="font-size: 11px; color: var(--text-muted);"><i class="fa-solid fa-globe text-cyan"></i> Búsqueda local + API Open Food Facts</span>
+                    <button class="btn-sm btn-epic-secondary" onclick="App.toggleCustomFoodForm()" style="font-size: 11px;">
+                        <i class="fa-solid fa-plus text-emerald"></i> + Crear Alimento Personalizado
+                    </button>
+                </div>
+
+                <!-- Formulario desplegable para crear alimento propio -->
+                <div id="custom-food-form" style="display:none; background: rgba(255,255,255,0.03); border:1px solid var(--border-glass); padding:16px; border-radius:var(--radius-sm); margin-bottom:16px;">
+                    <h4 style="font-size:14px; font-weight:800; margin-bottom:10px;"><i class="fa-solid fa-pen-to-square text-cyan"></i> Registrar Alimento Personalizado (por 100g)</h4>
+                    <div class="form-group-epic" style="margin-bottom:10px;">
+                        <label>Nombre del Alimento / Producto / Marca</label>
+                        <input type="text" id="custom-food-name" class="form-control-epic" placeholder="Ej. Barrita Proteica Hacendado">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group-epic">
+                            <label>Calorías (kcal)</label>
+                            <input type="number" id="custom-food-kcal" class="form-control-epic" placeholder="380">
+                        </div>
+                        <div class="form-group-epic">
+                            <label>Proteína (g)</label>
+                            <input type="number" step="0.1" id="custom-food-prot" class="form-control-epic" placeholder="25.0">
+                        </div>
+                    </div>
+                    <div class="form-row" style="margin-top:10px;">
+                        <div class="form-group-epic">
+                            <label>Carbohidratos (g)</label>
+                            <input type="number" step="0.1" id="custom-food-carb" class="form-control-epic" placeholder="30.0">
+                        </div>
+                        <div class="form-group-epic">
+                            <label>Grasas (g)</label>
+                            <input type="number" step="0.1" id="custom-food-fat" class="form-control-epic" placeholder="10.0">
+                        </div>
+                    </div>
+                    <button class="btn-epic-primary" style="width:100%; margin-top:12px;" onclick="App.saveCustomFood()">
+                        <i class="fa-solid fa-floppy-disk"></i> Guardar Alimento en Mi Base de Datos
+                    </button>
+                </div>
+
+                <div class="form-row margin-v">
+                    <div class="form-group-epic">
+                        <label>Comida de Destino</label>
+                        <select id="food-meal-select" class="form-control-epic">
+                            <option value="desayuno">Desayuno</option>
+                            <option value="almuerzo">Almuerzo</option>
+                            <option value="pre-workout">Pre-Entrenamiento</option>
+                            <option value="post-workout">Post-Entrenamiento</option>
+                            <option value="cena">Cena</option>
+                            <option value="snacks">Snacks / Colación</option>
+                        </select>
+                    </div>
+                    <div class="form-group-epic">
+                        <label>Cantidad (Gramos / ml)</label>
+                        <input type="number" id="food-grams-input" class="form-control-epic" value="100" min="1">
+                    </div>
+                </div>
+
+                <div class="food-results-grid" id="food-search-results">
+                    <!-- Dynamic food items -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: SELECCIONAR RUTINA CIENTÍFICA -->
+    <div id="modal-select-routine" class="modal-backdrop">
+        <div class="modal-card-epic glass-card-epic">
+            <div class="modal-header-epic">
+                <h3><i class="fa-solid fa-sliders text-cyan"></i> Seleccionar Protocolo Científico</h3>
+                <button class="modal-close-btn" id="btn-close-routine-modal">&times;</button>
+            </div>
+            <div class="modal-body-epic">
+                <div id="routines-options-list" class="routines-grid-epic">
+                    <!-- Dynamic scientific splits -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Audio Synthesizer -->
+    <script src="js/utils/soundEffect.js"></script>
+    <!-- JavaScript Files -->
+    <script src="js/data/exercises.js"></script>
+    <script src="js/data/foodDatabase.js"></script>
+    <script src="js/data/routines.js"></script>
+    <script src="js/data/supplements.js"></script>
+    <script src="js/utils/storage.js"></script>
+    <script src="js/modules/nutritionEngine.js"></script>
+    <script src="js/modules/workoutPlanner.js"></script>
+    <script src="js/modules/fatigueEngine.js"></script>
+    <script src="js/modules/heatMap.js"></script>
+    <script src="js/modules/strengthEngine.js"></script>
+    <script src="js/modules/foodTracker.js"></script>
+    <script src="js/modules/analytics.js"></script>
+    
+    <!-- Entrenador Personal Inteligente (AI Coach Modules) -->
+    <script src="js/modules/onboardingWizard.js"></script>
+    <script src="js/modules/planGenerator.js"></script>
+    <script src="js/modules/calendarView.js"></script>
+    <script src="js/modules/weeklyCheckIn.js"></script>
+    <script src="js/modules/achievements.js"></script>
+    <script src="js/modules/progressPhotos.js"></script>
+    <script src="js/modules/autoRegulator.js"></script>
+    <script src="js/modules/smartMealPlanner.js"></script>
+
+    <script src="js/app.js"></script>
+</body>
+</html>

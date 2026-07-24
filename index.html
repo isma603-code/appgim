@@ -1010,6 +1010,30 @@
         </div>
     </div>
 
+    <!-- NATIVE MOBILE BOTTOM NAVIGATION BAR (Android & Samsung S25 Ultra) -->
+    <nav class="mobile-bottom-nav">
+        <button class="mobile-nav-btn active" id="mob-nav-dashboard" onclick="App.switchTab('dashboard')">
+            <i class="fa-solid fa-house-chimney"></i>
+            <span>Inicio</span>
+        </button>
+        <button class="mobile-nav-btn" id="mob-nav-myplan" onclick="App.switchTab('myplan')">
+            <i class="fa-solid fa-wand-magic-sparkles text-emerald"></i>
+            <span>Mi Plan</span>
+        </button>
+        <button class="mobile-nav-btn action-center" onclick="WorkoutPlanner.startGuided1ClickFlow()">
+            <div class="center-icon"><i class="fa-solid fa-play"></i></div>
+            <span>Entrenar</span>
+        </button>
+        <button class="mobile-nav-btn" id="mob-nav-nutrition" onclick="App.switchTab('nutrition')">
+            <i class="fa-solid fa-utensils"></i>
+            <span>Nutrición</span>
+        </button>
+        <button class="mobile-nav-btn" id="mob-nav-progress" onclick="App.switchTab('progress')">
+            <i class="fa-solid fa-chart-line text-amber"></i>
+            <span>Evolución</span>
+        </button>
+    </nav>
+
     <!-- Audio Synthesizer -->
     <script src="js/utils/soundEffect.js"></script>
     <!-- JavaScript Files -->

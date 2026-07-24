@@ -264,6 +264,13 @@ const App = {
     setupTabNavigation: () => {
         const navBtns = document.querySelectorAll(".nav-btn");
         const panes = document.querySelectorAll(".tab-pane");
+        const mobBtns = document.querySelectorAll(".mobile-nav-btn");
+
+        const updateMobNav = (targetTab) => {
+            mobBtns.forEach(m => m.classList.remove("active"));
+            const targetMob = document.getElementById("mob-nav-" + targetTab);
+            if (targetMob) targetMob.classList.add("active");
+        };
 
         navBtns.forEach(btn => {
             btn.addEventListener("click", () => {
@@ -273,6 +280,8 @@ const App = {
                 panes.forEach(p => p.classList.remove("active"));
 
                 btn.classList.add("active");
+                updateMobNav(targetTab);
+
                 const pane = document.getElementById(`tab-${targetTab}`);
                 if (pane) pane.classList.add("active");
 

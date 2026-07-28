@@ -405,6 +405,11 @@ const WorkoutPlanner = {
 
         const setsLeft = (totalSets - WorkoutPlanner.guidedSetIndex) + 1;
 
+        // Calculate overall progress percentage across all exercises and sets
+        const totalAllSets = day.exercises.reduce((sum, ex) => sum + (ex.sets || 3), 0);
+        const completedSets = day.exercises.slice(0, WorkoutPlanner.guidedExerciseIndex).reduce((sum, ex) => sum + (ex.sets || 3), 0) + (WorkoutPlanner.guidedSetIndex - 1);
+        const progressPct = Math.round((completedSets / totalAllSets) * 100);
+
         modal.innerHTML = `
             <div class="modal-card-epic glass-card-epic" style="max-width: 520px; width: 92%; text-align: center; padding: 26px;">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">

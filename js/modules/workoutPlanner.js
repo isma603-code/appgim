@@ -330,29 +330,43 @@ const WorkoutPlanner = {
     /* ═══════════════════════════════════════════════════════════════
        MODO 1-CLIC ASISTIDO (ULTRA FÁCIL PARA NOVATOS)
        ═══════════════════════════════════════════════════════════════ */
-    startGuided1ClickFlow: () => {
+    /* ═══════════════════════════════════════════════════════════════
+       MODO 1-CLIC ASISTIDO (ULTRA FÁCIL PARA NOVATOS)
+       ═══════════════════════════════════════════════════════════════ */
+    startGuided1ClickFlow: (dayIndex = 0) => {
         let plan = StorageUtil.get("apexlab_generated_plan", null);
-        let dayToTrain = null;
+        let availableDays = [];
 
         if (plan && plan.weekPlan && plan.weekPlan.length > 0) {
-            dayToTrain = plan.weekPlan[0];
-        } else if (WorkoutPlanner.activeRoutine && WorkoutPlanner.activeRoutine.days) {
-            dayToTrain = WorkoutPlanner.activeRoutine.days[0];
+            availableDays = plan.weekPlan;
+        } else if (WorkoutPlanner.activeRoutine && WorkoutPlanner.activeRoutine.days && WorkoutPlanner.activeRoutine.days.length > 0) {
+            availableDays = WorkoutPlanner.activeRoutine.days;
+        } else if (typeof SCIENTIFIC_ROUTINES !== "undefined" && SCIENTIFIC_ROUTINES.length > 0) {
+            availableDays = SCIENTIFIC_ROUTINES[0].days;
         }
 
-        if (!dayToTrain) {
-            alert("Genera o selecciona tu plan primero.");
+        if (!availableDays || availableDays.length === 0) {
+            alert("Cargando protocolo de entrenamiento...");
             return;
         }
 
-        WorkoutPlanner.currentGuidedDay = dayToTrain;
+        const validIndex = (dayIndex >= 0 && dayIndex < availableDays.length) ? dayIndex : 0;
+        WorkoutPlanner.availableGuidedDays = availableDays;
+        WorkoutPlanner.currentGuidedDayIndex = validIndex;
+        WorkoutPlanner.currentGuidedDay = availableDays[validIndex];
         WorkoutPlanner.guidedExerciseIndex = 0;
         WorkoutPlanner.guidedSetIndex = 1;
         WorkoutPlanner.renderGuidedModalStep();
     },
 
+    switchGuidedDay: (dayIndex) => {
+        WorkoutPlanner.startGuided1ClickFlow(dayIndex);
+    },
+
     renderGuidedModalStep: () => {
         const day = WorkoutPlanner.currentGuidedDay;
+        if (!day || !day.exercises) return;
+
         const exItem = day.exercises[WorkoutPlanner.guidedExerciseIndex];
         
         if (!exItem) {
@@ -381,6 +395,21 @@ const WorkoutPlanner = {
 
         const nextExItem = day.exercises[WorkoutPlanner.guidedExerciseIndex + 1];
         const nextExData = nextExItem ? ((typeof EXERCISES_DATABASE !== "undefined" ? EXERCISES_DATABASE.find(e => e.id === nextExItem.exerciseId) : null) || { name: nextExItem.exerciseId }) : null;
+
+        // Construct day switcher tabs HTML
+        let dayTabsHtml = "";
+        if (WorkoutPlanner.availableGuidedDays && WorkoutPlanner.availableGuidedDays.length > 1) {
+            dayTabsHtml = `<div style="display: flex; gap: 6px; overflow-x: auto; margin-bottom: 12px; padding-bottom: 4px;">`;
+            WorkoutPlanner.availableGuidedDays.forEach((d, idx) => {
+                const isActive = idx === WorkoutPlanner.currentGuidedDayIndex;
+                dayTabsHtml += `
+                    <button onclick="WorkoutPlanner.switchGuidedDay(${idx})" style="flex: 1; min-width: 90px; padding: 6px 10px; font-size: 11px; font-weight: 700; border-radius: 8px; border: 1px solid ${isActive ? 'var(--primary-emerald)' : 'var(--border-glass)'}; background: ${isActive ? 'rgba(16, 185, 129, 0.2)' : 'rgba(255, 255, 255, 0.04)'}; color: ${isActive ? 'var(--primary-emerald)' : 'var(--text-muted)'}; cursor: pointer; white-space: nowrap;">
+                        ${d.name || 'Día ' + (idx + 1)}
+                    </button>
+                `;
+            });
+            dayTabsHtml += `</div>`;
+        }
 
         // Construct interactive set bubbles HTML
         let setBubblesHtml = "";
@@ -411,11 +440,13 @@ const WorkoutPlanner = {
         const progressPct = Math.round((completedSets / totalAllSets) * 100);
 
         modal.innerHTML = `
-            <div class="modal-card-epic glass-card-epic" style="max-width: 520px; width: 92%; text-align: center; padding: 26px;">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-                    <span class="badge-pro" style="color: var(--accent-amber);"><i class="fa-solid fa-wand-magic-sparkles"></i> Asistente 1-Clic</span>
+            <div class="modal-card-epic glass-card-epic" style="max-width: 520px; width: 92%; text-align: center; padding: 24px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                    <span class="badge-pro" style="color: var(--accent-amber);"><i class="fa-solid fa-wand-magic-sparkles"></i> Asistente 1-Clic • ${day.name || 'Entrenamiento'}</span>
                     <button class="modal-close-btn" onclick="document.getElementById('modal-guided-flow').classList.remove('active')">&times;</button>
                 </div>
+
+                ${dayTabsHtml}
 
                 <div style="margin-bottom: 14px;">
                     <div style="display: flex; justify-content: space-between; font-size: 11px; color: var(--text-muted); margin-bottom: 4px;">

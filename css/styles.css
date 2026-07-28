@@ -54,6 +54,12 @@ html, body {
 }
 
 /* Theme Switching Palettes */
+body.theme-red {
+    --primary-emerald: #ef4444;
+    --primary-glow: rgba(239, 68, 68, 0.45);
+    --border-highlight: rgba(239, 68, 68, 0.5);
+}
+
 body.theme-cyan {
     --primary-emerald: #06b6d4;
     --primary-glow: rgba(6, 182, 212, 0.4);
@@ -95,6 +101,7 @@ body.theme-purple {
 }
 
 .theme-dot:hover { transform: scale(1.3); }
+.theme-dot.red { background: #ef4444; box-shadow: 0 0 10px rgba(239, 68, 68, 0.6); }
 .theme-dot.emerald { background: #10b981; }
 .theme-dot.cyan { background: #06b6d4; }
 .theme-dot.amber { background: #f59e0b; }
@@ -118,7 +125,7 @@ body.dark-theme {
     position: fixed;
     width: 380px;
     height: 380px;
-    background: radial-gradient(circle, rgba(16, 185, 129, 0.14) 0%, rgba(6, 182, 212, 0.05) 50%, transparent 70%);
+    background: radial-gradient(circle, rgba(239, 68, 68, 0.18) 0%, rgba(244, 63, 94, 0.06) 50%, transparent 70%);
     border-radius: 50%;
     pointer-events: none;
     z-index: 9999;
@@ -134,7 +141,7 @@ body.dark-theme {
     z-index: 10000;
 }
 
-/* Fluid Mesh & Cyber Grid Background */
+/* Fluid Mesh & Cyber Grid Background (Fondo Rojo Carmesí Obsidiana) */
 .mesh-background {
     position: fixed;
     top: 0; left: 0;
@@ -142,9 +149,9 @@ body.dark-theme {
     z-index: -1;
     overflow: hidden;
     pointer-events: none;
-    background-color: var(--bg-dark);
+    background-color: #0b0305;
     background-image: 
-        radial-gradient(circle at 50% 0%, rgba(16, 185, 129, 0.08), transparent 70%),
+        radial-gradient(circle at 50% 0%, rgba(239, 68, 68, 0.16), transparent 70%),
         radial-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px);
     background-size: 100% 100%, 36px 36px;
 }
@@ -153,14 +160,14 @@ body.dark-theme {
     position: absolute;
     border-radius: 50%;
     filter: blur(120px);
-    opacity: 0.38;
+    opacity: 0.45;
     animation: floatMesh 18s cubic-bezier(0.4, 0, 0.2, 1) infinite alternate;
 }
 
-.ball-1 { width: 650px; height: 650px; background: radial-gradient(circle, #10b981 0%, #059669 80%); top: -200px; left: -200px; }
-.ball-2 { width: 750px; height: 750px; background: radial-gradient(circle, #06b6d4 0%, #0284c7 80%); bottom: -250px; right: -200px; animation-delay: -6s; }
-.ball-3 { width: 550px; height: 550px; background: radial-gradient(circle, #8b5cf6 0%, #6d28d9 80%); top: 30%; left: 40%; animation-delay: -12s; }
-.ball-4 { width: 500px; height: 500px; background: radial-gradient(circle, #f59e0b 0%, #d97706 80%); top: 65%; left: 5%; animation-delay: -16s; }
+.ball-1 { width: 680px; height: 680px; background: radial-gradient(circle, #ef4444 0%, #991b1b 80%); top: -200px; left: -200px; }
+.ball-2 { width: 780px; height: 780px; background: radial-gradient(circle, #f43f5e 0%, #be123c 80%); bottom: -250px; right: -200px; animation-delay: -6s; }
+.ball-3 { width: 580px; height: 580px; background: radial-gradient(circle, #dc2626 0%, #7f1d1d 80%); top: 30%; left: 40%; animation-delay: -12s; }
+.ball-4 { width: 520px; height: 520px; background: radial-gradient(circle, #f59e0b 0%, #991b1b 80%); top: 65%; left: 5%; animation-delay: -16s; }
 
 @keyframes floatMesh {
     0% { transform: translate(0, 0) scale(1) rotate(0deg); opacity: 0.32; }

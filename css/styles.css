@@ -134,7 +134,7 @@ body.dark-theme {
     z-index: 10000;
 }
 
-/* Fluid Mesh Gradient Background */
+/* Fluid Mesh & Cyber Grid Background */
 .mesh-background {
     position: fixed;
     top: 0; left: 0;
@@ -142,24 +142,30 @@ body.dark-theme {
     z-index: -1;
     overflow: hidden;
     pointer-events: none;
+    background-color: var(--bg-dark);
+    background-image: 
+        radial-gradient(circle at 50% 0%, rgba(16, 185, 129, 0.08), transparent 70%),
+        radial-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+    background-size: 100% 100%, 36px 36px;
 }
 
 .mesh-ball {
     position: absolute;
     border-radius: 50%;
-    filter: blur(140px);
-    opacity: 0.28;
-    animation: floatMesh 22s cubic-bezier(0.4, 0, 0.2, 1) infinite alternate;
+    filter: blur(120px);
+    opacity: 0.38;
+    animation: floatMesh 18s cubic-bezier(0.4, 0, 0.2, 1) infinite alternate;
 }
 
-.ball-1 { width: 600px; height: 600px; background: var(--primary-emerald); top: -150px; left: -150px; }
-.ball-2 { width: 700px; height: 700px; background: var(--accent-cyan); bottom: -200px; right: -150px; animation-delay: -7s; }
-.ball-3 { width: 500px; height: 500px; background: var(--accent-purple); top: 35%; left: 35%; animation-delay: -14s; }
-.ball-4 { width: 450px; height: 450px; background: var(--accent-amber); top: 60%; left: 10%; animation-delay: -18s; }
+.ball-1 { width: 650px; height: 650px; background: radial-gradient(circle, #10b981 0%, #059669 80%); top: -200px; left: -200px; }
+.ball-2 { width: 750px; height: 750px; background: radial-gradient(circle, #06b6d4 0%, #0284c7 80%); bottom: -250px; right: -200px; animation-delay: -6s; }
+.ball-3 { width: 550px; height: 550px; background: radial-gradient(circle, #8b5cf6 0%, #6d28d9 80%); top: 30%; left: 40%; animation-delay: -12s; }
+.ball-4 { width: 500px; height: 500px; background: radial-gradient(circle, #f59e0b 0%, #d97706 80%); top: 65%; left: 5%; animation-delay: -16s; }
 
 @keyframes floatMesh {
-    0% { transform: translate(0, 0) scale(1) rotate(0deg); }
-    100% { transform: translate(90px, 110px) scale(1.15) rotate(45deg); }
+    0% { transform: translate(0, 0) scale(1) rotate(0deg); opacity: 0.32; }
+    50% { transform: translate(60px, 80px) scale(1.12) rotate(20deg); opacity: 0.45; }
+    100% { transform: translate(110px, 130px) scale(1.2) rotate(45deg); opacity: 0.35; }
 }
 
 .app-container {

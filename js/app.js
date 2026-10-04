@@ -218,8 +218,7 @@ function initEventListeners() {
                 e.currentTarget.classList.add('active');
 
                 // Close mobile sidebar if open
-                const sb = document.getElementById('sidebar');
-                if (sb) sb.classList.remove('mobile-open', 'active');
+                toggleSidebar(false);
             }
         });
     });
@@ -230,22 +229,9 @@ function initEventListeners() {
         btnToggleSidebar.addEventListener('click', (e) => {
             e.preventDefault();
             e.stopPropagation();
-            const sb = document.getElementById('sidebar');
-            if (sb) {
-                sb.classList.toggle('mobile-open');
-                sb.classList.toggle('active');
-            }
+            toggleSidebar();
         });
     }
-
-    // Close mobile sidebar when clicking outside
-    document.addEventListener('click', (e) => {
-        const sb = document.getElementById('sidebar');
-        const btn = document.getElementById('btn-toggle-sidebar');
-        if (sb && (sb.classList.contains('mobile-open') || sb.classList.contains('active')) && !sb.contains(e.target) && !btn?.contains(e.target)) {
-            sb.classList.remove('mobile-open', 'active');
-        }
-    });
 
     // Quick Data Management Buttons
     document.getElementById('btn-seed-data')?.addEventListener('click', () => seedDemoData(true));
@@ -448,6 +434,30 @@ function renderWorkshopAlerts() {
     }
 }
 
+function toggleSidebar(forceOpen) {
+    const sb = document.getElementById('sidebar');
+    const backdrop = document.getElementById('sidebar-backdrop');
+    if (!sb) return;
+
+    const isOpen = (forceOpen !== undefined) ? forceOpen : !sb.classList.contains('mobile-open');
+    if (isOpen) {
+        sb.classList.add('mobile-open', 'active');
+        if (backdrop) backdrop.classList.add('active');
+        document.body.classList.add('sidebar-open-locked');
+    } else {
+        sb.classList.remove('mobile-open', 'active');
+        if (backdrop) backdrop.classList.remove('active');
+        document.body.classList.remove('sidebar-open-locked');
+    }
+}
+
+function switchMobileTab(tabId, el) {
+    switchTab(tabId);
+    document.querySelectorAll('.mobile-nav-btn').forEach(btn => btn.classList.remove('active'));
+    if (el) el.classList.add('active');
+    toggleSidebar(false);
+}
+
 function switchTab(tabId) {
     const sections = document.querySelectorAll('.content-section');
     sections.forEach(sec => {
@@ -466,6 +476,15 @@ function switchTab(tabId) {
                 nav.classList.add('active');
             } else {
                 nav.classList.remove('active');
+            }
+        });
+
+        // Update mobile bottom nav active state
+        document.querySelectorAll('.mobile-nav-btn').forEach(btn => {
+            if (btn.getAttribute('data-tab') === tabId) {
+                btn.classList.add('active');
+            } else {
+                btn.classList.remove('active');
             }
         });
         
@@ -4534,6 +4553,8 @@ window.runMaterialAdvisor = runMaterialAdvisor;
 window.saveSignatureAndDeliver = saveSignatureAndDeliver;
 window.clearSignatureCanvas = clearSignatureCanvas;
 window.clearSignaturePad = clearSignatureCanvas;
+window.toggleSidebar = toggleSidebar;
+window.switchMobileTab = switchMobileTab;
 
 
 

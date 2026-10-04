@@ -43,6 +43,9 @@
         <i class="fa-solid fa-cubes-stacked brand-logo"></i>
         <div class="brand-title">Print3D Studio</div>
         <div class="brand-tag">MASTER EDITION v7.0</div>
+        <button class="sidebar-close-btn d-md-none" onclick="toggleSidebar(false)" title="Cerrar menú">
+          <i class="fa-solid fa-times"></i>
+        </button>
       </div>
       
       <nav class="nav-menu">
@@ -117,39 +120,41 @@
         <input type="file" id="file-import-input" accept=".json" style="display: none;">
       </div>
     </aside>
+    <!-- Backdrop overlay for mobile sidebar -->
+    <div id="sidebar-backdrop" class="sidebar-backdrop" onclick="toggleSidebar(false)"></div>
 
     <!-- Main Wrapper -->
     <div class="main-wrapper">
       <header class="top-header">
         <div class="header-title-group">
-          <button id="btn-toggle-sidebar" class="btn-icon btn-outline d-md-none">
+          <button id="btn-toggle-sidebar" class="btn-icon btn-outline d-md-none" onclick="toggleSidebar()">
             <i class="fa-solid fa-bars"></i>
           </button>
           <h1 id="page-title"><i class="fa-solid fa-chart-pie"></i> Dashboard General</h1>
         </div>
-        <div class="header-actions" style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center;">
+        <div class="header-actions">
           <button class="btn-outline btn-sm search-trigger-btn" onclick="openGlobalSearch()" title="Buscador global rápido (Ctrl+K)">
-            <i class="fa-solid fa-magnifying-glass text-cyan"></i> Buscar... <kbd class="search-kbd">Ctrl+K</kbd>
+            <i class="fa-solid fa-magnifying-glass text-cyan"></i> <span class="d-none d-sm-inline">Buscar...</span> <kbd class="search-kbd d-none d-md-inline">Ctrl+K</kbd>
           </button>
-          <button class="btn-success btn-sm" onclick="openOrderModalWithDefaults()" style="font-weight: 700; padding: 7px 14px; box-shadow: 0 0 14px rgba(16, 185, 129, 0.35);">
-            <i class="fa-solid fa-plus"></i> Nuevo Encargo
+          <button class="btn-success btn-sm btn-new-order-header" onclick="openOrderModalWithDefaults()" style="font-weight: 700; padding: 7px 14px; box-shadow: 0 0 14px rgba(16, 185, 129, 0.35);">
+            <i class="fa-solid fa-plus"></i> <span class="btn-label-text">Nuevo Encargo</span>
           </button>
-          <button class="btn-primary btn-sm" onclick="openModal('modal-filament')" title="Añadir una bobina a tu stock">
+          <button class="btn-primary btn-sm d-none d-md-inline-flex" onclick="openModal('modal-filament')" title="Añadir una bobina a tu stock">
             <i class="fa-solid fa-circle-plus"></i> Bobina
           </button>
-          <button class="btn-outline btn-sm" id="btn-mode-toggle" onclick="toggleWorkshopMode()" title="Cambiar entre modo taller fácil o modo avanzado" style="border-color: rgba(0, 210, 255, 0.4); color: var(--primary);">
+          <button class="btn-outline btn-sm d-none d-lg-inline-flex" id="btn-mode-toggle" onclick="toggleWorkshopMode()" title="Cambiar entre modo taller fácil o modo avanzado" style="border-color: rgba(0, 210, 255, 0.4); color: var(--primary);">
             <i class="fa-solid fa-wand-magic-sparkles"></i> <span id="workshop-mode-text">Modo Taller</span>
           </button>
-          <button class="btn-outline btn-sm" onclick="openElectricityConfigModal()" title="Configurar coste de la electricidad (€/kWh)">
+          <button class="btn-outline btn-sm d-none d-lg-inline-flex" onclick="openElectricityConfigModal()" title="Configurar coste de la electricidad (€/kWh)">
             <i class="fa-solid fa-bolt text-amber"></i> <span id="header-tariff-val">0.18 €/kWh</span>
           </button>
-          <button class="btn-outline btn-sm" onclick="openMobileGuideModal()" title="Abrir o instalar en tu móvil por Wi-Fi">
+          <button class="btn-outline btn-sm d-none d-lg-inline-flex" onclick="openMobileGuideModal()" title="Abrir o instalar en tu móvil por Wi-Fi">
             <i class="fa-solid fa-mobile-screen-button text-cyan"></i> Móvil / App
           </button>
-          <button class="btn-outline btn-sm" onclick="toggleDarkMode()" id="btn-dark-mode">
-            <i class="fa-solid fa-circle-half-stroke"></i> Tema
+          <button class="btn-outline btn-sm" onclick="toggleDarkMode()" id="btn-dark-mode" title="Cambiar tema">
+            <i class="fa-solid fa-circle-half-stroke"></i> <span class="d-none d-sm-inline">Tema</span>
           </button>
-          <div class="advanced-only" style="display: inline-flex; gap: 6px;">
+          <div class="advanced-only d-none d-md-inline-flex" style="gap: 6px;">
             <button class="btn-outline btn-sm" onclick="openQRScanner()" title="Escanear QR de Bobina/Paquete">
               <i class="fa-solid fa-qrcode text-cyan"></i> QR
             </button>
@@ -2266,6 +2271,30 @@
       </div>
     </div>
   </div>
+
+  <!-- Android Native-Style Bottom Navigation Bar -->
+  <nav class="mobile-bottom-nav d-md-none" id="mobile-bottom-nav">
+    <button type="button" class="mobile-nav-btn active" data-tab="tab-dashboard" onclick="switchMobileTab('tab-dashboard', this)">
+      <i class="fa-solid fa-chart-pie"></i>
+      <span>Taller</span>
+    </button>
+    <button type="button" class="mobile-nav-btn" data-tab="tab-orders" onclick="switchMobileTab('tab-orders', this)">
+      <i class="fa-solid fa-list-check"></i>
+      <span>Pedidos</span>
+    </button>
+    <button type="button" class="mobile-nav-btn" data-tab="tab-calculator" onclick="switchMobileTab('tab-calculator', this)">
+      <i class="fa-solid fa-calculator"></i>
+      <span>Calcular</span>
+    </button>
+    <button type="button" class="mobile-nav-btn" data-tab="tab-filaments" onclick="switchMobileTab('tab-filaments', this)">
+      <i class="fa-solid fa-spool"></i>
+      <span>Bobinas</span>
+    </button>
+    <button type="button" class="mobile-nav-btn" onclick="toggleSidebar(true)">
+      <i class="fa-solid fa-bars"></i>
+      <span>Menú</span>
+    </button>
+  </nav>
 
   <!-- Toast Container -->
   <div id="toast-container" style="position: fixed; top: 20px; right: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 10px;"></div>

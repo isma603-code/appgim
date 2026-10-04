@@ -3625,3 +3625,332 @@ body.light-mode .spotlight-footer kbd {
   color: #1e293b;
 }
 
+/* ==========================================================================
+   ANDROID & MOBILE OPTIMIZATIONS (100% NATIVE FEEL)
+   ========================================================================== */
+
+/* Prevent horizontal page overflow & jitter on touch devices */
+html, body {
+  overflow-x: hidden !important;
+  position: relative;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body.sidebar-open-locked {
+  overflow: hidden !important;
+}
+
+/* Android viewport font-size fix to prevent Chrome auto-zoom */
+@media (max-width: 768px) {
+  input.form-control,
+  select.form-select,
+  textarea.form-control,
+  .spotlight-input {
+    font-size: 16px !important; /* Prevents auto-zoom on Android Chrome */
+  }
+}
+
+/* Sidebar Backdrop */
+.sidebar-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(4, 7, 16, 0.7);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  z-index: 1400;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.25s ease, visibility 0.25s;
+}
+
+.sidebar-backdrop.active {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+/* Close button inside sidebar for mobile */
+.sidebar-close-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #fff;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  margin-left: auto;
+}
+
+/* Native Android Bottom Navigation Bar */
+.mobile-bottom-nav {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background: rgba(10, 15, 28, 0.96);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  z-index: 1200;
+  align-items: center;
+  justify-content: space-around;
+  padding: 4px 6px calc(4px + env(safe-area-inset-bottom, 0px));
+  box-shadow: 0 -4px 25px rgba(0, 0, 0, 0.6);
+}
+
+.mobile-nav-btn {
+  background: none;
+  border: none;
+  color: var(--text-dim, #94a3b8);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 6px 10px;
+  border-radius: 12px;
+  cursor: pointer;
+  flex: 1;
+  transition: all 0.15s ease;
+  user-select: none;
+}
+
+.mobile-nav-btn i {
+  font-size: 18px;
+  transition: transform 0.15s ease, color 0.15s ease;
+}
+
+.mobile-nav-btn.active {
+  color: var(--primary, #00d2ff);
+}
+
+.mobile-nav-btn.active i {
+  transform: translateY(-2px);
+  color: var(--primary, #00d2ff);
+}
+
+/* Responsive breakpoint overrides for mobile & tablet */
+@media (max-width: 900px) {
+  .mobile-bottom-nav {
+    display: flex !important;
+  }
+  
+  .content-body {
+    padding: 14px 12px calc(80px + env(safe-area-inset-bottom, 0px)) !important;
+  }
+
+  /* Sticky Top Header on Android */
+  .top-header {
+    height: 56px !important;
+    padding: 0 12px !important;
+    gap: 8px !important;
+  }
+
+  .header-title-group {
+    gap: 8px !important;
+    min-width: 0;
+    flex: 1;
+  }
+
+  .header-title-group h1 {
+    font-size: 15px !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    gap: 6px !important;
+  }
+
+  .header-actions {
+    gap: 6px !important;
+    flex-wrap: nowrap !important;
+  }
+
+  .search-trigger-btn {
+    padding: 6px 10px !important;
+    font-size: 12px !important;
+  }
+
+  /* Compact button on mobile */
+  .btn-new-order-header {
+    padding: 6px 10px !important;
+    font-size: 12px !important;
+  }
+  
+  .btn-new-order-header .btn-label-text {
+    display: none !important;
+  }
+
+  /* Sidebar Drawer on mobile */
+  .sidebar {
+    position: fixed !important;
+    top: 0 !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    width: 290px !important;
+    max-width: 85vw !important;
+    height: 100% !important;
+    height: 100dvh !important;
+    z-index: 1500 !important;
+    transform: translateX(-100%) !important;
+    transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    box-shadow: 10px 0 30px rgba(0, 0, 0, 0.7) !important;
+    padding-bottom: env(safe-area-inset-bottom, 16px) !important;
+  }
+
+  .sidebar.mobile-open,
+  .sidebar.active {
+    transform: translateX(0) !important;
+  }
+
+  .brand-header {
+    display: flex !important;
+    align-items: center !important;
+    padding: 16px !important;
+    gap: 10px !important;
+  }
+
+  /* Grid columns become single column */
+  .grid-4, .grid-3, .grid-2 {
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+  }
+
+  /* Calculator on mobile */
+  .calc-grid {
+    grid-template-columns: 1fr !important;
+    gap: 14px !important;
+  }
+
+  .three-viewer-container {
+    height: 240px !important;
+  }
+
+  /* Kanban carousel on mobile */
+  .kanban-board {
+    display: flex !important;
+    gap: 12px !important;
+    overflow-x: auto !important;
+    scroll-snap-type: x mandatory !important;
+    -webkit-overflow-scrolling: touch !important;
+    padding-bottom: 12px !important;
+  }
+
+  .kanban-column, .kanban-col {
+    scroll-snap-align: center !important;
+    flex: 0 0 85vw !important;
+    min-width: 85vw !important;
+    max-width: 85vw !important;
+  }
+
+  /* Modals on mobile (Bottom-sheet touch feel) */
+  .modal-overlay {
+    padding: 10px 6px !important;
+    align-items: flex-end !important;
+    backdrop-filter: blur(8px) !important;
+  }
+
+  .modal-content, .modal-card {
+    width: 100% !important;
+    max-width: 100% !important;
+    max-height: 90dvh !important;
+    border-radius: 20px 20px 10px 10px !important;
+    margin: 0 !important;
+  }
+
+  .modal-header {
+    padding: 14px 16px !important;
+  }
+
+  .modal-title {
+    font-size: 16px !important;
+  }
+
+  .modal-body {
+    padding: 14px 16px !important;
+    max-height: calc(90dvh - 120px) !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+
+  .modal-footer {
+    padding: 12px 16px !important;
+    gap: 8px !important;
+  }
+
+  .modal-footer button {
+    flex: 1 !important;
+    min-height: 42px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  /* Welcome card on mobile */
+  .workshop-welcome-card {
+    padding: 16px 14px !important;
+  }
+
+  .workshop-welcome-buttons {
+    flex-direction: column !important;
+    width: 100% !important;
+  }
+
+  .workshop-welcome-buttons button {
+    width: 100% !important;
+    justify-content: center !important;
+  }
+
+  /* Spotlight search on mobile */
+  .spotlight-modal {
+    max-height: 85dvh !important;
+    border-radius: 18px 18px 0 0 !important;
+  }
+
+  .spotlight-header {
+    padding: 12px 16px !important;
+  }
+
+  .spotlight-input {
+    font-size: 16px !important;
+  }
+
+  .spotlight-filters {
+    padding: 8px 14px !important;
+  }
+
+  .spotlight-body {
+    max-height: calc(85dvh - 140px) !important;
+  }
+
+  /* Hide kbd shortcuts hints on touch devices */
+  .search-kbd,
+  .spotlight-footer kbd,
+  .spotlight-footer {
+    display: none !important;
+  }
+
+  /* Light mode mobile adjustments */
+  body.light-mode .mobile-bottom-nav {
+    background: rgba(255, 255, 255, 0.96) !important;
+    border-color: rgba(0, 0, 0, 0.08) !important;
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.08) !important;
+  }
+
+  body.light-mode .mobile-nav-btn {
+    color: #64748b !important;
+  }
+
+  body.light-mode .mobile-nav-btn.active {
+    color: #0284c7 !important;
+  }
+}
+
+

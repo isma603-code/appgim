@@ -2,14 +2,15 @@
   "name": "Print3D Studio Master ERP",
   "short_name": "Print3D ERP",
   "description": "Suite integral de gestión para talleres de impresión 3D",
-  "start_url": "/",
+  "start_url": "./",
+  "scope": "./",
   "display": "standalone",
   "background_color": "#060a14",
   "theme_color": "#060a14",
   "orientation": "any",
   "icons": [
     {
-      "src": "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/svgs/solid/cube.svg",
+      "src": "img/icon.svg",
       "sizes": "192x192 512x512",
       "type": "image/svg+xml",
       "purpose": "any maskable"

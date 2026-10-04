@@ -8,6 +8,8 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/svg+xml" href="img/icon.svg">
+  <link rel="apple-touch-icon" href="img/icon.svg">
   <title>Print3D Studio Master | Plataforma Profesional de Impresión 3D</title>
   <meta name="description" content="Suite integral de gestión para talleres de impresión 3D: Tablero Kanban Drag & Drop, Catálogo 3D, CRM Clientes, Visor WebGL y telemetría industrial.">
 
@@ -97,6 +99,24 @@
             <i class="fa-solid fa-wand-magic-sparkles text-cyan"></i> Asistente de Materiales
           </a>
         </div>
+
+        <!-- Acceso Rápido y Herramientas Móviles -->
+        <div class="nav-section-title"><i class="fa-solid fa-mobile-screen-button text-cyan mr-1"></i> HERRAMIENTAS & APP</div>
+        <a href="#" class="nav-item btn-pwa-install-item" onclick="triggerPWAInstall(); toggleSidebar(false); return false;" style="background: rgba(0, 210, 255, 0.1); border: 1px solid rgba(0, 210, 255, 0.3); color: #38bdf8; font-weight: 700;">
+          <i class="fa-solid fa-mobile-screen-button text-cyan"></i> 📲 Instalar App en tu Móvil
+        </a>
+        <a href="#" class="nav-item" onclick="openQRScanner(); toggleSidebar(false); return false;">
+          <i class="fa-solid fa-qrcode text-cyan"></i> Escáner QR de Bobinas
+        </a>
+        <a href="#" class="nav-item" onclick="openElectricityConfigModal(); toggleSidebar(false); return false;">
+          <i class="fa-solid fa-bolt text-amber"></i> Coste de Luz (€/kWh)
+        </a>
+        <a href="#" class="nav-item" onclick="openModal('modal-wastage'); toggleSidebar(false); return false;">
+          <i class="fa-solid fa-dumpster-fire text-amber"></i> Registrar Pieza Fallida
+        </a>
+        <a href="#" class="nav-item" onclick="openSpoolScaleModal(); toggleSidebar(false); return false;">
+          <i class="fa-solid fa-weight-scale text-purple"></i> Báscula & Restar Tara
+        </a>
       </nav>
 
       <div class="sidebar-footer">
@@ -136,6 +156,9 @@
           <button class="btn-outline btn-sm search-trigger-btn" onclick="openGlobalSearch()" title="Buscador global rápido (Ctrl+K)">
             <i class="fa-solid fa-magnifying-glass text-cyan"></i> <span class="d-none d-sm-inline">Buscar...</span> <kbd class="search-kbd d-none d-md-inline">Ctrl+K</kbd>
           </button>
+          <button class="btn-outline btn-sm btn-pwa-install-header" onclick="triggerPWAInstall()" title="Instalar aplicación en tu móvil" style="border-color: rgba(0, 210, 255, 0.4); color: var(--primary); font-weight: 600;">
+            <i class="fa-solid fa-mobile-screen-button text-cyan"></i> <span class="d-none d-sm-inline">Instalar App</span>
+          </button>
           <button class="btn-success btn-sm btn-new-order-header" onclick="openOrderModalWithDefaults()" style="font-weight: 700; padding: 7px 14px; box-shadow: 0 0 14px rgba(16, 185, 129, 0.35);">
             <i class="fa-solid fa-plus"></i> <span class="btn-label-text">Nuevo Encargo</span>
           </button>
@@ -147,9 +170,6 @@
           </button>
           <button class="btn-outline btn-sm d-none d-lg-inline-flex" onclick="openElectricityConfigModal()" title="Configurar coste de la electricidad (€/kWh)">
             <i class="fa-solid fa-bolt text-amber"></i> <span id="header-tariff-val">0.18 €/kWh</span>
-          </button>
-          <button class="btn-outline btn-sm d-none d-lg-inline-flex" onclick="openMobileGuideModal()" title="Abrir o instalar en tu móvil por Wi-Fi">
-            <i class="fa-solid fa-mobile-screen-button text-cyan"></i> Móvil / App
           </button>
           <button class="btn-outline btn-sm" onclick="toggleDarkMode()" id="btn-dark-mode" title="Cambiar tema">
             <i class="fa-solid fa-circle-half-stroke"></i> <span class="d-none d-sm-inline">Tema</span>
@@ -184,6 +204,9 @@
               </button>
               <button class="btn-outline btn-md" onclick="openModal('modal-filament')">
                 <i class="fa-solid fa-circle-plus"></i> Añadir Bobina
+              </button>
+              <button class="btn-outline btn-md" onclick="triggerPWAInstall()" style="border-color: rgba(0, 210, 255, 0.4); color: var(--primary);">
+                <i class="fa-solid fa-mobile-screen-button"></i> 📲 Instalar App
               </button>
             </div>
           </div>

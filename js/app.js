@@ -2066,12 +2066,60 @@ function exportAnalyticsCSV() {
 // ==========================================================================
 function openModal(id) {
     const modal = document.getElementById(id);
-    if (modal) modal.classList.add('active');
+    if (modal) {
+        modal.classList.add('active');
+        document.body.classList.add('modal-open-locked');
+    }
 }
 
 function closeModal(id) {
     const modal = document.getElementById(id);
-    if (modal) modal.classList.remove('active');
+    if (modal) {
+        modal.classList.remove('active');
+        // Only remove body lock if no other modals are active
+        const anyActive = document.querySelector('.modal-overlay.active');
+        if (!anyActive) {
+            document.body.classList.remove('modal-open-locked');
+        }
+    }
+}
+
+// Global click-outside-to-close for all modals
+document.addEventListener('click', (e) => {
+    if (e.target && e.target.classList && e.target.classList.contains('modal-overlay') && e.target.classList.contains('active')) {
+        closeModal(e.target.id);
+    }
+});
+
+// Native PWA Installation Support
+let deferredPWAInstallPrompt = null;
+
+window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPWAInstallPrompt = e;
+    document.querySelectorAll('.btn-pwa-install').forEach(btn => {
+        btn.style.display = 'inline-flex';
+    });
+});
+
+window.addEventListener('appinstalled', () => {
+    deferredPWAInstallPrompt = null;
+    showToast('¡Print3D Studio instalada como app en tu dispositivo!', 'success');
+    playChime('success');
+});
+
+function triggerPWAInstall() {
+    if (deferredPWAInstallPrompt) {
+        deferredPWAInstallPrompt.prompt();
+        deferredPWAInstallPrompt.userChoice.then((choiceResult) => {
+            if (choiceResult && choiceResult.outcome === 'accepted') {
+                showToast('¡Instalando Print3D Studio!', 'success');
+            }
+            deferredPWAInstallPrompt = null;
+        });
+    } else {
+        openMobileGuideModal();
+    }
 }
 
 function populatePickers() {
@@ -4555,6 +4603,7 @@ window.clearSignatureCanvas = clearSignatureCanvas;
 window.clearSignaturePad = clearSignatureCanvas;
 window.toggleSidebar = toggleSidebar;
 window.switchMobileTab = switchMobileTab;
+window.triggerPWAInstall = triggerPWAInstall;
 
 
 
